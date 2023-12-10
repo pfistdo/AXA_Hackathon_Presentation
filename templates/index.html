@@ -1,0 +1,114 @@
+{% extends '_base.html' %}
+{% set active_page = "index" %}
+{% block title %}Hackathon 2023{% endblock %}
+{% block content %}
+<style>
+    button {
+        background-color: #00008f !important;
+    }
+
+    #chatbox {
+        margin-top: 15%;
+        border: 1px solid #ccc !important;
+        padding: 25px 50px;
+        border-radius: 15px;
+        box-shadow: 0in 0in 15px 5px #ccc;
+    }
+
+    li a.active {
+        background-color: #00008f !important;
+        color: white !important;
+    }
+
+    li a {
+        color: #00008f !important;
+    }
+</style>
+
+<div class="container">
+    <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+            <img src="https://www.axa.ch/etc.clientlibs/axa/sites/core-assets/resources/images/logo-AXA.svg">
+        </a>
+
+        <ul class="nav nav-pills">
+            <li class="nav-item"><a href="#" class="nav-link">Home</a></li>
+            <li class="nav-item"><a href="#" class="nav-link">Documents</a></li>
+            <li class="nav-item"><a href="#" class="nav-link active" aria-current="page">Pension & Assets</a></li>
+        </ul>
+    </header>
+</div>
+
+<div id="chatbox">
+    <!-- INPUT -->
+    <div class="mb-3">
+        <input type="text" class="form-control" id="chatInput">
+    </div>
+    <div class="mb-3 d-grid gap-2">
+        <button class="btn btn-primary" onclick="giveAnswer()">SUBMIT</button>
+    </div>
+
+    <!-- OUTPUT -->
+    <div id="spinnerDiv" class="d-flex justify-content-center">
+        <div id="spinner" class="spinner-border text-primary" role="status" style="display:none;">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <div id="chatAnswerBox" class="alert alert-primary" role="alert" style="display: none;">
+        <h3>Frage</h3>
+        <p id="userQuestion"></p>
+        <h3>Antwort</h3>
+        <p id="chatAnswer"></p>
+    </div>
+</div>
+
+<script>
+    var count = 0;
+    function giveAnswer() {
+        count++; // increment count
+
+        // show spinner for 5s
+        document.getElementById("spinner").style.display = "block";
+        document.getElementById("spinner").style.height = "6rem";
+        document.getElementById("spinner").style.width = "6rem";
+        document.getElementById("spinnerDiv").classList = "mt-5 mb-5 d-flex justify-content-center";
+        setTimeout(function () {
+            document.getElementById("spinner").style.display = "none";
+            document.getElementById("spinnerDiv").classList = "d-flex justify-content-center";
+        }, 5000);
+
+        const answerDiv = document.createElement("div");
+        answerDiv.classList = "alert alert-primary";
+        answerDiv.setAttribute("role", "alert");
+
+        setTimeout(function () {
+            var chatInput = document.getElementById("chatInput").value;
+            document.getElementById("userQuestion").textContent = chatInput;
+            if (count == 1) {
+                answer = `
+                Ja, du kannst dir ein neues Wohneigentum für 1.2 Mio CHF leisten, vorausgesetzt 
+                du bringst mindestens 20 Prozent Eigenkapital ein. Dein Eigenkapital beträgt insgesamt 
+                245'000 CHF (95'000 CHF auf dem Konto + 100'000 CHF aus der Pensionskasse + 50'000 CHF 
+                aus der Privaten Vorsorge). Die Eigenkapitalquote beträgt 20.42 Prozent, was die 
+                die Finanzierbarkeit gewährleistet.
+            `;
+            } else if (count == 2) {
+                answer = `
+                Die Learnings aus dem Hackathon sind, dass GPT 4.0 bereits gute Antworten ohne spezifischen Kontext liefert. Es
+                wurde festgestellt, dass die VBs (verbalen Beschreibungen) schwierig zu interpretieren sind. Es war wichtig zu sehen,
+                dass GPT mitgeteilt werden muss, in welcher Rolle es handeln soll. Business Verständnis ist zentral für das Debugging
+                und eine gute interdisziplinäre Zusammenarbeit zwischen der ZHAW und AXA war positiv.
+            `;
+            }
+            answerDiv.innerHTML = `
+                <h3>Frage</h3>
+                <p>${chatInput}</p>
+                <h3>Antwort</h3>
+                <p>${answer}</p>
+            `;
+            document.getElementById("chatbox").appendChild(answerDiv);
+            answerDiv.style.display = "block";
+        }, 5000);
+    }
+</script>
+{% endblock %}
